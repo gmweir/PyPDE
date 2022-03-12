@@ -54,7 +54,7 @@ else()
     endif(UNIX)
 
     if (WIN32)
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O2")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
     endif(WIN32)
 
     add_library(pypde SHARED ${SOURCES})
