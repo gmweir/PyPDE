@@ -1,3 +1,4 @@
+# python setup.py build
 import os
 import platform
 import subprocess
@@ -25,6 +26,7 @@ class cmake_build_ext(build_ext):
             extdir = os.path.abspath(
                 os.path.dirname(self.get_ext_fullpath(ext.name)))
 
+            # cfg = 'Debug' if options['--debug'] == 'ON' else 'Release'
             cfg = 'Release'
 
             cmake_args = [
@@ -48,11 +50,13 @@ class cmake_build_ext(build_ext):
                         cfg.upper(), extdir)
                 ]
                 # Assuming that Visual Studio and MinGW are supported compilers
-                if self.compiler.compiler_type == 'msvc':
-                    cmake_args += ['-DCMAKE_GENERATOR_PLATFORM=%s' % plat]
-                else:
+                if 1:
+                # if self.compiler.compiler_type == 'msvc':
+                #     cmake_args += ['-DCMAKE_GENERATOR_PLATFORM=%s' % plat]
+                # else:
                     cmake_args += ['-G', 'MinGW Makefiles']
-
+                    cmake_args += ['-DCMAKE_CXX_COMPILER=g++']
+                    cmake_args += ['-DCMAKE_C_COMPILER=gcc']
             else:
                 cmake_args.append('-DCMAKE_BUILD_TYPE={}'.format(cfg))
 
@@ -65,7 +69,9 @@ class cmake_build_ext(build_ext):
 
             # Build
             subprocess.check_call(['cmake', '--build', '.'],
-                                  cwd=self.build_temp)
+                                   cwd=self.build_temp)
+            # subprocess.check_call(['cmake', '--build', '.', '--config', cfg],
+            #                       cwd=self.build_temp)
 
 
 setup(
